@@ -42,4 +42,53 @@
       align-items: center; /* Center vertically if needed */
       margin: 0 auto; /* Ensure the element itself is centered */
   }
+
 }
+
+
+
+.overlay-info{
+  max-width: 100px;
+  margin: 0 100 0 100;
+}
+
+@media(max-width:800px){
+  .overlay-info{
+    scale: 0.8;
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column; /* Stack the figure and text */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+}
+
+.item figure {
+  margin: 0 auto; /* Center the figure */
+}
+
+.item h4 {
+  text-align: center; /* Center the heading text */
+  margin-top: 15px;
+}
+
+.item figure {
+  margin: 0 auto;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth color and scale transition */
+}
+
+.item:hover figure {
+  transform: scale(1.15); /* Slight scale animation */
+  color: invert;
+}
+
+.item h4 {
+  text-align: center;
+  margin-top: 15px;
+  transition: color 0.3s ease; /* Smooth color transition */
+  color: #000; /* Initial text color */
+}
+
+
