@@ -27,7 +27,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			}
 		}
 	}
+	if (isset($_POST["shot-update"])) {
+		$conn = getConnection();
 
+		$id = $_POST["id"];
+		$visibility = $_POST["visibility"];
+
+		$conn->execute_query("UPDATE shots SET visibility = '$visibility' WHERE id = '$id'");
+	}
+	if (isset($_POST["shot-delete"])) {
+		$conn = getConnection();
+
+		$id = $_POST["id"];
+
+		$res = $conn->query("SELECT * FROM shots WHERE id = '$id'");
+		$row = $res->fetch_assoc();
+
+		$path = $row["path"];
+
+		$conn->execute_query("DELETE FROM shots WHERE id = '$id'");
+		$file = "../uploads/" . $path;
+
+		if (file_exists($file)) {
+			unlink($file);
+		}
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -242,37 +266,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>01</td>
-													<td>2024 09 12</td>
-													<td>Astro</td>
-													<td>
-														<div class="dropdown-container">
-															<div class="dropdown">
-																<button style="font-size: small"
-																	class="btn dropdown-toggle" type="button"
-																	id="dropdownMenuButton" data-bs-toggle="dropdown"
-																	aria-expanded="false">
-																	Select Visibility
-																</button>
-																<ul class="dropdown-menu"
-																	aria-labelledby="dropdownMenuButton">
-																	<li>
-																		<a class="dropdown-item dropdown-item-public"
-																			href="#"
-																			onclick="updateDropdown('Public')">Public</a>
-																	</li>
-																	<li>
-																		<a class="dropdown-item dropdown-item-hidden"
-																			href="#"
-																			onclick="updateDropdown('Hidden')">Hidden</a>
-																	</li>
-																</ul>
-															</div>
-														</div>
-													</td>
-													<td><a class="btn btn-sm btn-primary" href="">Delete</a></td>
-												</tr>
+												<?php
+												$conn = getConnection();
+												$result = $conn->query("SELECT * FROM shots");
+
+												while ($row = $result->fetch_assoc()) {
+													?>
+													<tr>
+														<form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
+															<input type="hidden" name="id" value="<?php echo $row["id"] ?>">
+															<td><?php echo $row["id"] ?></td>
+															<td><?php echo $row["created"] ?></td>
+															<td><?php echo $row["name"] ?></td>
+															<td>
+																<select name="visibility" id="">
+																	<option <?php echo $row["visibility"] == "visible" ? "selected" : "" ?> value="visible">Visible</option>
+																	<option <?php echo $row["visibility"] == "hidden" ? "selected" : "" ?> value="hidden">Hidden</option>
+																</select>
+															</td>
+															<td>
+																<input type="submit" class="btn btn-sm btn-primary"
+																	name="shot-delete" value="Delete">
+																<input type="submit" class="btn btn-sm btn-dark"
+																	name="shot-update" value="Save">
+															</td>
+														</form>
+													</tr>
+													<?php
+												}
+												?>
 											</tbody>
 										</table>
 									</div>
