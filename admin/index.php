@@ -1,3 +1,35 @@
+<?php
+define("ROOT", "../");
+
+require_once "../utils/database.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if (isset($_POST["shots-upload"])) {
+		$conn = getConnection();
+
+		$imageName = $_POST["image-name"];
+		$target_dir = "../uploads/";
+		$target_file = $target_dir . basename($_FILES["image"]["name"]);
+
+		$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+		$path = $imageName . "." . $imageFileType;
+		$target_file = $target_dir . $path;
+
+		$check = getimagesize($_FILES["image"]["tmp_name"]);
+
+		if ($check == false) {
+			die("File is not an image - " . $check["mime"] . ".");
+		}
+
+		if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+			if ($conn->query("INSERT INTO shots (name, path) VALUES ('$imageName', '$path')")) {
+				echo "<script>alert('Uploaded');</script>";
+			}
+		}
+	}
+
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,11 +196,12 @@
 								<h6 style="font-size: smaller" class="mb-0">Upload Images</h6>
 							</div>
 							<div>
-								<form>
-									<!-- Image Name Field -->
+								<form method="post" action="<?php echo $_SERVER["PHP_SELF"]; ?>"
+									enctype="multipart/form-data">
+									<input type="hidden" name="shots-upload" />
 									<div class="mb-3">
 										<label for="imageName" class="form-label">Image Name</label>
-										<input type="text" class="form-control" id="imageName"
+										<input type="text" name="image-name" class="form-control" id="imageName"
 											placeholder="Enter image name" />
 									</div>
 
@@ -177,7 +210,8 @@
 										<label for="imageFile" class="form-label">Choose Image File</label>
 										<div class="upload-area" id="uploadArea">
 											Drag & Drop Image Here or <br /><br />
-											<input type="file" id="imageFile" class="form-control" accept="image/*" />
+											<input type="file" id="imageFile" name="image" class="form-control"
+												accept="image/*" />
 										</div>
 									</div>
 

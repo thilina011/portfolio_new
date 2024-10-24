@@ -1,3 +1,10 @@
+<?php
+define("ROOT", "./");
+
+require_once "./utils/database.php";
+
+$conn = getConnection();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -184,125 +191,21 @@
 				<div class="container inner pt-60 pb-140">
 					<h2 class="section-title section-title-upper text-center">Selected Shots</h2>
 					<div id="cube-grid" class="cbp light-gallery" style="padding-top: 20px">
-						<!--/.cbp-item -->
-						<div class="cbp-item commercial">
-							<figure class="overlay overlay2">
-								<a href="images/1.jpg"><img src="images/1.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item commercial macro">
-							<figure class="overlay overlay2">
-								<a href="style/images/art/p18-full.ion2"><img src=".jpg" alt="" />
-									<div id="caption2" class="d-none">
-										<p>Nulla vitae elit libero, a pharetra augue.</p>
-									</div>
-								</a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item conceptual interior">
-							<figure class="overlay overlay2">
-								<a href="images/1.jpg"><img src="images/1.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item interior video">
-							<figure class="overlay overlay2">
-								<a href="images/2.jpg"><img src="images/2.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item commercial macro">
-							<figure class="overlay overlay2">
-								<a href="images/3.jpg"><img src="images/3.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item interior">
-							<figure class="overlay overlay2">
-								<a href="images/4.jpg"><img src="images/4.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item conceptual interior">
-							<figure class="overlay overlay2">
-								<a href="images/5.jpg"><img src="images/5.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item commercial video">
-							<figure class="overlay overlay2">
-								<a href="images/6.jpg"><img src="images/6.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item conceptual commercial">
-							<figure class="overlay overlay2">
-								<a href="images/7.jpg"><img src="images/7.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item interior macro">
-							<figure class="overlay overlay2">
-								<a href="images/8.jpg"><img src="images/8.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/9.jpg"><img src="images/9.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/10.jpg"><img src="images/10.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/11.jpg"><img src="images/11.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/12.jpg"><img src="images/12.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/13.jpg"><img src="images/13.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/14.jpg"><img src="images/14.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/15.jpg"><img src="images/15.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
-						<!--/.cbp-item -->
-						<div class="cbp-item interior commercial">
-							<figure class="overlay overlay2">
-								<a href="images/16.jpg"><img src="images/16.jpg" alt="" /></a>
-							</figure>
-						</div>
-						<!--/.cbp-item -->
+						<?php
+						$sql = "SELECT * FROM shots WHERE visibility = 'visible'";
+						$result = $conn->query($sql);
+
+						while ($row = $result->fetch_assoc()) {
+							?>
+							<div class="cbp-item interior video">
+								<figure class="overlay overlay2">
+									<a href="images/2.jpg"><img src="<?php echo './uploads/' . $row['path']; ?>"
+											alt="" /></a>
+								</figure>
+							</div>
+							<?php
+						}
+						?>
 					</div>
 					<div style="margin-top: 10%" class="text-center">
 						<a href="./gallery/gallery.html" class="btn btn-full-rounded scroll">See More</a>
